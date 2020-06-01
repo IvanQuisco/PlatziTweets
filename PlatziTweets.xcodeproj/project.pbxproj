@@ -3,17 +3,19 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		32BBAF5832DC13A476A9ECD1 /* Pods_PlatziTweets.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84F54897FCE4AC517D799955 /* Pods_PlatziTweets.framework */; };
 		487AB77B2485764200CC6388 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487AB77A2485764200CC6388 /* AppDelegate.swift */; };
 		487AB77D2485764200CC6388 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487AB77C2485764200CC6388 /* SceneDelegate.swift */; };
-		487AB77F2485764200CC6388 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487AB77E2485764200CC6388 /* ViewController.swift */; };
+		487AB77F2485764200CC6388 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487AB77E2485764200CC6388 /* WelcomeViewController.swift */; };
 		487AB7822485764200CC6388 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 487AB7802485764200CC6388 /* Main.storyboard */; };
 		487AB7842485764800CC6388 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 487AB7832485764800CC6388 /* Assets.xcassets */; };
 		487AB7872485764800CC6388 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 487AB7852485764800CC6388 /* LaunchScreen.storyboard */; };
+		487AB79224858C3800CC6388 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487AB79124858C3800CC6388 /* LoginController.swift */; };
+		487AB79424858C4300CC6388 /* RegisterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487AB79324858C4300CC6388 /* RegisterController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,11 +23,13 @@
 		487AB7772485764200CC6388 /* PlatziTweets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlatziTweets.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		487AB77A2485764200CC6388 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		487AB77C2485764200CC6388 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		487AB77E2485764200CC6388 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		487AB77E2485764200CC6388 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		487AB7812485764200CC6388 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		487AB7832485764800CC6388 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		487AB7862485764800CC6388 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		487AB7882485764800CC6388 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		487AB79124858C3800CC6388 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
+		487AB79324858C4300CC6388 /* RegisterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterController.swift; sourceTree = "<group>"; };
 		84F54897FCE4AC517D799955 /* Pods_PlatziTweets.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PlatziTweets.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D1686F4D67D904562173C57 /* Pods-PlatziTweets.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlatziTweets.debug.xcconfig"; path = "Target Support Files/Pods-PlatziTweets/Pods-PlatziTweets.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -93,7 +97,9 @@
 		487AB79024857E6D00CC6388 /* App */ = {
 			isa = PBXGroup;
 			children = (
-				487AB77E2485764200CC6388 /* ViewController.swift */,
+				487AB77E2485764200CC6388 /* WelcomeViewController.swift */,
+				487AB79124858C3800CC6388 /* LoginController.swift */,
+				487AB79324858C4300CC6388 /* RegisterController.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -104,7 +110,6 @@
 				9D1686F4D67D904562173C57 /* Pods-PlatziTweets.debug.xcconfig */,
 				003838CC3A3025252697ED38 /* Pods-PlatziTweets.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -231,7 +236,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				487AB77F2485764200CC6388 /* ViewController.swift in Sources */,
+				487AB79424858C4300CC6388 /* RegisterController.swift in Sources */,
+				487AB77F2485764200CC6388 /* WelcomeViewController.swift in Sources */,
+				487AB79224858C3800CC6388 /* LoginController.swift in Sources */,
 				487AB77B2485764200CC6388 /* AppDelegate.swift in Sources */,
 				487AB77D2485764200CC6388 /* SceneDelegate.swift in Sources */,
 			);
