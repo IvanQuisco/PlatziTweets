@@ -16,6 +16,7 @@
 		487AB7872485764800CC6388 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 487AB7852485764800CC6388 /* LaunchScreen.storyboard */; };
 		487AB79224858C3800CC6388 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487AB79124858C3800CC6388 /* LoginController.swift */; };
 		487AB79424858C4300CC6388 /* RegisterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487AB79324858C4300CC6388 /* RegisterController.swift */; };
+		487AB7982485C13700CC6388 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487AB7972485C13700CC6388 /* HomeViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		487AB7882485764800CC6388 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		487AB79124858C3800CC6388 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		487AB79324858C4300CC6388 /* RegisterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterController.swift; sourceTree = "<group>"; };
+		487AB7972485C13700CC6388 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		84F54897FCE4AC517D799955 /* Pods_PlatziTweets.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PlatziTweets.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D1686F4D67D904562173C57 /* Pods-PlatziTweets.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlatziTweets.debug.xcconfig"; path = "Target Support Files/Pods-PlatziTweets/Pods-PlatziTweets.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -97,11 +99,28 @@
 		487AB79024857E6D00CC6388 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				487AB7962485C12100CC6388 /* Home */,
+				487AB7952485C11600CC6388 /* Welcome */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		487AB7952485C11600CC6388 /* Welcome */ = {
+			isa = PBXGroup;
+			children = (
 				487AB77E2485764200CC6388 /* WelcomeViewController.swift */,
 				487AB79124858C3800CC6388 /* LoginController.swift */,
 				487AB79324858C4300CC6388 /* RegisterController.swift */,
 			);
-			path = App;
+			path = Welcome;
+			sourceTree = "<group>";
+		};
+		487AB7962485C12100CC6388 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				487AB7972485C13700CC6388 /* HomeViewController.swift */,
+			);
+			path = Home;
 			sourceTree = "<group>";
 		};
 		4AAE773BB7C120B0EDDC856D /* Pods */ = {
@@ -241,6 +260,7 @@
 				487AB79224858C3800CC6388 /* LoginController.swift in Sources */,
 				487AB77B2485764200CC6388 /* AppDelegate.swift in Sources */,
 				487AB77D2485764200CC6388 /* SceneDelegate.swift in Sources */,
+				487AB7982485C13700CC6388 /* HomeViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

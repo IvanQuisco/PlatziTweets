@@ -45,7 +45,7 @@ class WelcomeViewController: UIViewController {
         btn.setTitle("Iniciar Sesion", for: .normal)
         btn.setTitleColor(.black, for: .normal)
         btn.backgroundColor = .white
-        btn.layer.cornerRadius = 20
+        btn.layer.cornerRadius = 25
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
     }()
@@ -105,9 +105,11 @@ class WelcomeViewController: UIViewController {
         buttonStackView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(buttonStackView)
         buttonStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
-        buttonStackView.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        buttonStackView.heightAnchor.constraint(equalToConstant: 100).isActive = true
         buttonStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         buttonStackView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.75).isActive = true
+        
+        loginButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
     
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
