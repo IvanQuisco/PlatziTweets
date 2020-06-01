@@ -56,15 +56,39 @@
 		487AB7792485764200CC6388 /* PlatziTweets */ = {
 			isa = PBXGroup;
 			children = (
+				487AB78E24857E5B00CC6388 /* Base */,
+				487AB79024857E6D00CC6388 /* App */,
+				487AB78F24857E6500CC6388 /* Resources */,
+			);
+			path = PlatziTweets;
+			sourceTree = "<group>";
+		};
+		487AB78E24857E5B00CC6388 /* Base */ = {
+			isa = PBXGroup;
+			children = (
 				487AB77A2485764200CC6388 /* AppDelegate.swift */,
 				487AB77C2485764200CC6388 /* SceneDelegate.swift */,
-				487AB77E2485764200CC6388 /* ViewController.swift */,
 				487AB7802485764200CC6388 /* Main.storyboard */,
-				487AB7832485764800CC6388 /* Assets.xcassets */,
 				487AB7852485764800CC6388 /* LaunchScreen.storyboard */,
 				487AB7882485764800CC6388 /* Info.plist */,
 			);
-			path = PlatziTweets;
+			path = Base;
+			sourceTree = "<group>";
+		};
+		487AB78F24857E6500CC6388 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				487AB7832485764800CC6388 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		487AB79024857E6D00CC6388 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				487AB77E2485764200CC6388 /* ViewController.swift */,
+			);
+			path = App;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -286,7 +310,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 77PYHJ73D9;
-				INFOPLIST_FILE = PlatziTweets/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/PlatziTweets/Base/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -305,7 +329,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 77PYHJ73D9;
-				INFOPLIST_FILE = PlatziTweets/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/PlatziTweets/Base/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
