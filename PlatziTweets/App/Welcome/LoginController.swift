@@ -17,6 +17,8 @@ class LoginController: UIViewController {
     let emailTextfield: UITextField = {
         let tf = UITextField()
         tf.placeholder = "Email"
+        tf.autocapitalizationType = .none
+        tf.keyboardType = .emailAddress
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
     }()
@@ -24,6 +26,8 @@ class LoginController: UIViewController {
     let passwordTextfield: UITextField = {
         let tf = UITextField()
         tf.placeholder = "Password"
+        tf.keyboardType = .webSearch
+        tf.isSecureTextEntry = true
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
     }()
@@ -107,24 +111,23 @@ class LoginController: UIViewController {
             return
         }
         
-//        DispatchQueue.main.async {
-//            SVProgressHUD.show()
-//        }
+        DispatchQueue.main.async {
+            SVProgressHUD.show(withStatus: "Wait..")
+        }
 
         
         
         let request = LoginRequest(email: email, password: password)
-        
-        SN.post(endpoint: Endpoints.login, model: request) { (response: SNResultWithEntity<LoginResponse, ErrorResponse>) in
-            
-//            DispatchQueue.main.async {
-//                SVProgressHUD.dismiss()
-//            }
 
-            
+        SN.post(endpoint: Endpoints.login, model: request) { (response: SNResultWithEntity<LoginResponse, ErrorResponse>) in
+
+            DispatchQueue.main.async {
+                SVProgressHUD.dismiss()
+            }
+
+
             switch response {
-            case .success(let user):
-//                NotificationBanner(subtitle: "Welcome \(user.user.names)", style: .success, colors: nil).show()
+            case .success:
                 let nav = UINavigationController(rootViewController: HomeController())
                 nav.modalPresentationStyle = .fullScreen
                 self.present(nav, animated: true, completion: nil)
@@ -134,7 +137,7 @@ class LoginController: UIViewController {
                 NotificationBanner(subtitle: "Error: \(entity.error)", style: .warning, colors: nil).show()
             }
         }
-        
+//
         
 
     }

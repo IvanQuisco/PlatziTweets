@@ -9,6 +9,7 @@
 import UIKit
 
 class WelcomeViewController: UIViewController {
+
     
     let backgroundImageView: UIImageView = {
         let view = UIImageView()
@@ -66,11 +67,16 @@ class WelcomeViewController: UIViewController {
     }
     
     func setupNavigationItems() {
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithTransparentBackground()
-        navigationController?.navigationBar.compactAppearance = appearance
-        navigationController?.navigationBar.standardAppearance = appearance
-        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        if #available(iOS 13.0, *) {
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithTransparentBackground()
+            navigationController?.navigationBar.compactAppearance = appearance
+            navigationController?.navigationBar.standardAppearance = appearance
+            navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        } else {
+            navigationController?.navigationBar.shadowImage = UIImage()
+            navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        }
     }
     
     func setupViews() {

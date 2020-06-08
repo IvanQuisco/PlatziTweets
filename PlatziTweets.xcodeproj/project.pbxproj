@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		32BBAF5832DC13A476A9ECD1 /* Pods_PlatziTweets.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84F54897FCE4AC517D799955 /* Pods_PlatziTweets.framework */; };
 		487AB77B2485764200CC6388 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487AB77A2485764200CC6388 /* AppDelegate.swift */; };
-		487AB77D2485764200CC6388 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487AB77C2485764200CC6388 /* SceneDelegate.swift */; };
 		487AB77F2485764200CC6388 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487AB77E2485764200CC6388 /* WelcomeViewController.swift */; };
 		487AB7822485764200CC6388 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 487AB7802485764200CC6388 /* Main.storyboard */; };
 		487AB7842485764800CC6388 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 487AB7832485764800CC6388 /* Assets.xcassets */; };
@@ -34,7 +33,6 @@
 		003838CC3A3025252697ED38 /* Pods-PlatziTweets.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlatziTweets.release.xcconfig"; path = "Target Support Files/Pods-PlatziTweets/Pods-PlatziTweets.release.xcconfig"; sourceTree = "<group>"; };
 		487AB7772485764200CC6388 /* PlatziTweets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlatziTweets.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		487AB77A2485764200CC6388 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		487AB77C2485764200CC6388 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		487AB77E2485764200CC6388 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		487AB7812485764200CC6388 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		487AB7832485764800CC6388 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -103,7 +101,6 @@
 			isa = PBXGroup;
 			children = (
 				487AB77A2485764200CC6388 /* AppDelegate.swift */,
-				487AB77C2485764200CC6388 /* SceneDelegate.swift */,
 				487AB7802485764200CC6388 /* Main.storyboard */,
 				487AB7852485764800CC6388 /* LaunchScreen.storyboard */,
 				487AB7882485764800CC6388 /* Info.plist */,
@@ -323,7 +320,6 @@
 				488732C6248EA8DD000DCF7E /* Post.swift in Sources */,
 				488732D0248EA981000DCF7E /* RegisterRequest.swift in Sources */,
 				487AB77B2485764200CC6388 /* AppDelegate.swift in Sources */,
-				487AB77D2485764200CC6388 /* SceneDelegate.swift in Sources */,
 				487AB7982485C13700CC6388 /* HomeViewController.swift in Sources */,
 				488732CC248EA905000DCF7E /* ErrorResponse.swift in Sources */,
 				488732C4248EA8CF000DCF7E /* User.swift in Sources */,
@@ -476,7 +472,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 77PYHJ73D9;
 				INFOPLIST_FILE = "$(SRCROOT)/PlatziTweets/Base/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -496,7 +492,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 77PYHJ73D9;
 				INFOPLIST_FILE = "$(SRCROOT)/PlatziTweets/Base/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
