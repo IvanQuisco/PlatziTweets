@@ -27,6 +27,7 @@
 		488732D4248EA99B000DCF7E /* PostRequestLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488732D3248EA99B000DCF7E /* PostRequestLocation.swift */; };
 		488732D6248EA9A4000DCF7E /* LoginRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488732D5248EA9A4000DCF7E /* LoginRequest.swift */; };
 		488732D8248EAB8C000DCF7E /* Endpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488732D7248EAB8C000DCF7E /* Endpoints.swift */; };
+		488732DB248EDFDF000DCF7E /* TweetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488732DA248EDFDF000DCF7E /* TweetCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +53,7 @@
 		488732D3248EA99B000DCF7E /* PostRequestLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRequestLocation.swift; sourceTree = "<group>"; };
 		488732D5248EA9A4000DCF7E /* LoginRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRequest.swift; sourceTree = "<group>"; };
 		488732D7248EAB8C000DCF7E /* Endpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoints.swift; sourceTree = "<group>"; };
+		488732DA248EDFDF000DCF7E /* TweetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetCell.swift; sourceTree = "<group>"; };
 		84F54897FCE4AC517D799955 /* Pods_PlatziTweets.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PlatziTweets.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D1686F4D67D904562173C57 /* Pods-PlatziTweets.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlatziTweets.debug.xcconfig"; path = "Target Support Files/Pods-PlatziTweets/Pods-PlatziTweets.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -138,6 +140,7 @@
 		487AB7962485C12100CC6388 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				488732D9248EDF64000DCF7E /* Cells */,
 				487AB7972485C13700CC6388 /* HomeViewController.swift */,
 			);
 			path = Home;
@@ -175,6 +178,14 @@
 				488732C9248EA8FE000DCF7E /* GeneralResponse.swift */,
 			);
 			path = Responses;
+			sourceTree = "<group>";
+		};
+		488732D9248EDF64000DCF7E /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				488732DA248EDFDF000DCF7E /* TweetCell.swift */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		4AAE773BB7C120B0EDDC856D /* Pods */ = {
@@ -312,6 +323,7 @@
 				487AB79424858C4300CC6388 /* RegisterController.swift in Sources */,
 				488732D2248EA98F000DCF7E /* PostRequest.swift in Sources */,
 				488732D8248EAB8C000DCF7E /* Endpoints.swift in Sources */,
+				488732DB248EDFDF000DCF7E /* TweetCell.swift in Sources */,
 				487AB77F2485764200CC6388 /* WelcomeViewController.swift in Sources */,
 				488732CE248EA911000DCF7E /* LoginResponse.swift in Sources */,
 				488732C8248EA8F2000DCF7E /* PostLocation.swift in Sources */,

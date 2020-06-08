@@ -9,11 +9,19 @@
 import Foundation
 import UIKit
 
-class HomeController: UIViewController {
+class HomeController: UITableViewController {
+    
+    let cellID = "cellID"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupNavigationItems()
+        setupTableView()
+    }
+    
+    private func setupTableView() {
+        tableView.register(TweetCell.self, forCellReuseIdentifier: cellID)
     }
     
     func setupNavigationItems() {
@@ -31,4 +39,23 @@ class HomeController: UIViewController {
         navigationItem.title = "Tweets"
     }
 
+}
+
+extension HomeController {
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 10
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! TweetCell
+        return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 300
+    }
 }
