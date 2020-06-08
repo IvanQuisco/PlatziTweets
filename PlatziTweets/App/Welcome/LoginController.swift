@@ -125,7 +125,6 @@ class LoginController: UIViewController {
                 SVProgressHUD.dismiss()
             }
 
-
             switch response {
             case .success:
                 let nav = UINavigationController(rootViewController: HomeController())
@@ -137,9 +136,6 @@ class LoginController: UIViewController {
                 NotificationBanner(subtitle: "Error: \(entity.error)", style: .warning, colors: nil).show()
             }
         }
-//
-        
-
     }
     
 }

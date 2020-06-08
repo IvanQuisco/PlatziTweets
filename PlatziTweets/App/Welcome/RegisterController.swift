@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 import NotificationBannerSwift
+import Simple_Networking
+import SVProgressHUD
 
 class RegisterController: UIViewController {
     
@@ -22,6 +24,8 @@ class RegisterController: UIViewController {
     let emailTextfield: UITextField = {
         let tf = UITextField()
         tf.placeholder = "Email"
+        tf.autocapitalizationType = .none
+        tf.keyboardType = .emailAddress
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
     }()
@@ -29,6 +33,15 @@ class RegisterController: UIViewController {
     let passwordTextfield: UITextField = {
         let tf = UITextField()
         tf.placeholder = "Password"
+        tf.isSecureTextEntry = true
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        return tf
+    }()
+    
+    let password2Textfield: UITextField = {
+        let tf = UITextField()
+        tf.placeholder = "Confirm Password"
+        tf.isSecureTextEntry = true
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
     }()
@@ -79,7 +92,7 @@ class RegisterController: UIViewController {
         bottomImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         
         
-        let stackView = UIStackView(arrangedSubviews: [nameTextfield,emailTextfield,passwordTextfield,registerButton])
+        let stackView = UIStackView(arrangedSubviews: [nameTextfield,emailTextfield,passwordTextfield,password2Textfield,registerButton])
         stackView.axis = .vertical
         stackView.distribution = .equalSpacing
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -88,7 +101,7 @@ class RegisterController: UIViewController {
         stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
         stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
         stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-        stackView.heightAnchor.constraint(equalToConstant: 210).isActive = true
+        stackView.heightAnchor.constraint(equalToConstant: 250).isActive = true
         
         registerButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
@@ -117,8 +130,34 @@ class RegisterController: UIViewController {
             return
         }
         
-        let nav = UINavigationController(rootViewController: HomeController())
-        nav.modalPresentationStyle = .fullScreen
-        self.present(nav, animated: true, completion: nil)
+        guard let password2 = password2Textfield.text, !password2.isEmpty, password == password2 else {
+            NotificationBanner(title: "Error", subtitle: "Los passwords no coinciden", leftView: nil, rightView: nil, style: .warning, colors: nil).show()
+            return
+        }
+        
+        
+        let request = RegisterRequest(email: email, password: password, names: name)
+        
+        DispatchQueue.main.async {
+            SVProgressHUD.show(withStatus: "Registrando...")
+        }
+        
+        SN.post(endpoint: Endpoints.register, model: request) { [weak self] (response: SNResultWithEntity<LoginResponse, ErrorResponse>) in
+            
+            DispatchQueue.main.async {
+                SVProgressHUD.dismiss()
+            }
+            
+            switch response {
+            case .success:
+                let nav = UINavigationController(rootViewController: HomeController())
+                nav.modalPresentationStyle = .fullScreen
+                self?.present(nav, animated: true, completion: nil)
+            case .error:
+                NotificationBanner(subtitle: "Unknown error", style: .danger, colors: nil).show()
+            case .errorResult(let entity):
+                NotificationBanner(subtitle: "Error: \(entity.error)", style: .warning, colors: nil).show()
+            }
+        }
     }
 }
