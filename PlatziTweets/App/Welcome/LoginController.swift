@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 import NotificationBannerSwift
+import Simple_Networking
+import SVProgressHUD
 
 class LoginController: UIViewController {
     
@@ -105,10 +107,62 @@ class LoginController: UIViewController {
             return
         }
         
+//        DispatchQueue.main.async {
+//            SVProgressHUD.show()
+//        }
+
         
-        let nav = UINavigationController(rootViewController: HomeController())
-        nav.modalPresentationStyle = .fullScreen
-        self.present(nav, animated: true, completion: nil)
+        
+        let request = LoginRequest(email: email, password: password)
+        
+        SN.post(endpoint: Endpoints.login, model: request) { (response: SNResultWithEntity<LoginResponse, ErrorResponse>) in
+            
+//            DispatchQueue.main.async {
+//                SVProgressHUD.dismiss()
+//            }
+
+            
+            switch response {
+            case .success(let user):
+//                NotificationBanner(subtitle: "Welcome \(user.user.names)", style: .success, colors: nil).show()
+                let nav = UINavigationController(rootViewController: HomeController())
+                nav.modalPresentationStyle = .fullScreen
+                self.present(nav, animated: true, completion: nil)
+            case .error:
+                NotificationBanner(subtitle: "Unknown error", style: .danger, colors: nil).show()
+            case .errorResult(let entity):
+                NotificationBanner(subtitle: "Error: \(entity.error)", style: .warning, colors: nil).show()
+            }
+        }
+        
+        
+
     }
     
+}
+
+
+extension LoginController {
+    func showLoaderWithText(text: String){
+        SVProgressHUD.setDefaultStyle(.custom)
+        SVProgressHUD.setDefaultMaskType(.custom)
+        SVProgressHUD.setDefaultAnimationType(.flat)
+
+        SVProgressHUD.setBackgroundColor(UIColor.white)
+        SVProgressHUD.setRingRadius(30.0)
+        SVProgressHUD.setRingThickness(5.0)
+        SVProgressHUD.setForegroundColor(UIColor.black)
+            
+        if text.count > 0 {
+                
+            SVProgressHUD.show(withStatus: text)
+        } else {
+
+            SVProgressHUD.show()
+        }
+    }
+    
+    func hideLoader() {
+        SVProgressHUD.dismiss()
+    }
 }
