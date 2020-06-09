@@ -126,7 +126,8 @@ class LoginController: UIViewController {
             }
 
             switch response {
-            case .success:
+            case .success(let user):
+                SimpleNetworking.setAuthenticationHeader(prefix: "", token: user.token)
                 let nav = UINavigationController(rootViewController: HomeController())
                 nav.modalPresentationStyle = .fullScreen
                 self.present(nav, animated: true, completion: nil)
@@ -138,30 +139,4 @@ class LoginController: UIViewController {
         }
     }
     
-}
-
-
-extension LoginController {
-    func showLoaderWithText(text: String){
-        SVProgressHUD.setDefaultStyle(.custom)
-        SVProgressHUD.setDefaultMaskType(.custom)
-        SVProgressHUD.setDefaultAnimationType(.flat)
-
-        SVProgressHUD.setBackgroundColor(UIColor.white)
-        SVProgressHUD.setRingRadius(30.0)
-        SVProgressHUD.setRingThickness(5.0)
-        SVProgressHUD.setForegroundColor(UIColor.black)
-            
-        if text.count > 0 {
-                
-            SVProgressHUD.show(withStatus: text)
-        } else {
-
-            SVProgressHUD.show()
-        }
-    }
-    
-    func hideLoader() {
-        SVProgressHUD.dismiss()
-    }
 }

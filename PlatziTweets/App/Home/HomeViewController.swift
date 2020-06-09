@@ -8,20 +8,62 @@
 
 import Foundation
 import UIKit
+import Simple_Networking
+import SVProgressHUD
 
 class HomeController: UITableViewController {
     
     let cellID = "cellID"
+    
+    var dataSource: [Post] = [] {
+        didSet {
+            
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
+    let newPostButton: UIButton = {
+        let btn = UIButton()
+        btn.setTitle("＋", for: .normal)
+        btn.setTitleColor(.white, for: .normal)
+        btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 30)
+        btn.backgroundColor = .green
+        btn.layer.cornerRadius = 25
+        btn.layer.shadowColor = UIColor.black.cgColor
+        btn.layer.shadowOffset = CGSize(width: 0, height: 3)
+        btn.layer.shadowOpacity = 0.5
+        btn.layer.shadowRadius = 4
+        btn.layer.masksToBounds = false
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        return btn
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupNavigationItems()
         setupTableView()
+        getPosts()
     }
     
     private func setupTableView() {
         tableView.register(TweetCell.self, forCellReuseIdentifier: cellID)
+        
+        view.addSubview(newPostButton)
+        newPostButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -30).isActive = true
+        newPostButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -30).isActive = true
+        newPostButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        newPostButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        newPostButton.addTarget(self, action: #selector(newPostButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc func newPostButtonTapped() {
+        let postController = AddPostViewController()
+        let nav = UINavigationController(rootViewController: postController)
+        self.present(nav, animated: true, completion: nil)
     }
     
     func setupNavigationItems() {
@@ -39,6 +81,28 @@ class HomeController: UITableViewController {
         navigationItem.title = "Tweets"
     }
 
+    func getPosts() {
+        
+        DispatchQueue.main.async {
+            SVProgressHUD.show(withStatus: "Getting Tweets")
+        }
+        
+        SN.get(endpoint: Endpoints.getPost) { (response: SNResultWithEntity<[Post], ErrorResponse>) in
+            
+            DispatchQueue.main.async {
+                SVProgressHUD.dismiss()
+            }
+            
+            switch response {
+            case .success(let posts):
+                self.dataSource = posts
+            case .error(let error):
+                print("error", error.localizedDescription)
+            case .errorResult(let entity):
+                print("error again", entity.error)
+            }
+        }
+    }
 }
 
 extension HomeController {
@@ -47,15 +111,16 @@ extension HomeController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return dataSource.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! TweetCell
+        cell.post = dataSource[indexPath.row]
         return cell
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 300
+        return 350
     }
 }

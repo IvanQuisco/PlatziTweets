@@ -11,9 +11,15 @@ import UIKit
 
 class TweetCell: UITableViewCell {
     
+    var post: Post? {
+        didSet {
+            setTweet()
+        }
+    }
+    
+    
     let nameLabel: UILabel = {
         let label = UILabel()
-        
         let attributedText = NSMutableAttributedString()
         attributedText.append(NSAttributedString(string: "Ivan Q ", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 18), NSAttributedString.Key.foregroundColor: UIColor.black]))
         attributedText.append(NSAttributedString(string: "@IvanQuintana", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 11), NSAttributedString.Key.foregroundColor: UIColor.gray]))
@@ -37,8 +43,7 @@ class TweetCell: UITableViewCell {
     
     let tweetImageView: UIImageView = {
         let im = UIImageView()
-        im.image = UIImage(named: "loginBg")?.withRenderingMode(.alwaysOriginal)
-        im.contentMode = .scaleAspectFill
+        im.contentMode = .scaleAspectFit
         im.backgroundColor = .gray
         im.translatesAutoresizingMaskIntoConstraints = false
         return im
@@ -48,6 +53,11 @@ class TweetCell: UITableViewCell {
         let btn = UIButton()
         btn.setTitle("Ver Video", for: .normal)
         btn.setTitleColor(.black, for: .normal)
+        if #available(iOS 13.0, *) {
+            let image = UIImage(systemName: "video.fill")
+            btn.setImage(image, for: .normal)
+        }
+        btn.imageView?.tintColor = .green
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
     }()
@@ -55,7 +65,7 @@ class TweetCell: UITableViewCell {
     let dateLabel: UILabel = {
         let label = UILabel()
         label.text = "06/08/1995"
-        label.font = UIFont.boldSystemFont(ofSize: 12)
+        label.font = UIFont.boldSystemFont(ofSize: 11)
         label.textColor = .gray
         label.textAlignment = .left
         label.numberOfLines = 1
@@ -86,6 +96,34 @@ class TweetCell: UITableViewCell {
         stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20).isActive = true
         stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20).isActive = true
         
-        tweetImageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        tweetImageView.heightAnchor.constraint(equalToConstant: 200).isActive = true
+    }
+    
+    func setTweet() {
+        guard let post = self.post else {
+            return
+        }
+        let attributedText = NSMutableAttributedString()
+        attributedText.append(NSAttributedString(string: post.author.names+" ", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 18), NSAttributedString.Key.foregroundColor: UIColor.black]))
+        attributedText.append(NSAttributedString(string: post.author.nickname, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 11), NSAttributedString.Key.foregroundColor: UIColor.gray]))
+        nameLabel.attributedText = attributedText
+        mesageLabel.text = post.text
+        if post.hasImage {
+            tweetImageView.image = UIImage(named: "loginBg")?.withRenderingMode(.alwaysOriginal)
+        } else {
+            tweetImageView.image = nil
+        }
+        if post.hasVideo {
+            videoButton.setTitle("Ver Video", for: .normal)
+            videoButton.setTitleColor(.black, for: .normal)
+            if #available(iOS 13.0, *) {
+                let image = UIImage(systemName: "video.fill")
+                videoButton.setImage(image, for: .normal)
+            }
+        } else {
+            videoButton.setImage(nil, for: .normal)
+            videoButton.setTitle("Sin Video Disponible", for: .normal)
+        }
+        dateLabel.text = post.createdAt
     }
 }
