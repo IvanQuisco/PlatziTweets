@@ -70,6 +70,7 @@ class HomeController: UITableViewController {
         if #available(iOS 13.0, *) {
             let appearance = UINavigationBarAppearance()
             appearance.configureWithTransparentBackground()
+            appearance.backgroundColor = .white
             navigationController?.navigationBar.compactAppearance = appearance
             navigationController?.navigationBar.standardAppearance = appearance
             navigationController?.navigationBar.scrollEdgeAppearance = appearance
@@ -121,6 +122,25 @@ extension HomeController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 350
+        
+        let post = dataSource[indexPath.row]
+        
+        let textViewWidth = UIScreen.main.bounds.width - 40
+        let size = CGSize(width: textViewWidth, height: 1000)
+        let attributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14)]
+        
+        let estimatedFrame = NSString(string: post.text).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: attributes, context: nil)
+        
+        var height = estimatedFrame.height + 90
+        
+        if post.hasImage {
+            height += UIScreen.main.bounds.width - 40
+        }
+        
+        if post.hasVideo {
+            height += 35
+        }
+        
+        return height
     }
 }

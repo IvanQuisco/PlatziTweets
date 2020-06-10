@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import Kingfisher
 
 class TweetCell: UITableViewCell {
     
@@ -44,15 +45,14 @@ class TweetCell: UITableViewCell {
     let tweetImageView: UIImageView = {
         let im = UIImageView()
         im.contentMode = .scaleAspectFit
-        im.backgroundColor = .gray
+        im.layer.cornerRadius = 10
+        im.backgroundColor = UIColor(white: 0.95, alpha: 1)
         im.translatesAutoresizingMaskIntoConstraints = false
         return im
     }()
     
     let videoButton: UIButton = {
         let btn = UIButton()
-        btn.setTitle("Ver Video", for: .normal)
-        btn.setTitleColor(.black, for: .normal)
         if #available(iOS 13.0, *) {
             let image = UIImage(systemName: "video.fill")
             btn.setImage(image, for: .normal)
@@ -96,7 +96,7 @@ class TweetCell: UITableViewCell {
         stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20).isActive = true
         stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20).isActive = true
         
-        tweetImageView.heightAnchor.constraint(equalToConstant: 200).isActive = true
+        tweetImageView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 40).isActive = true
     }
     
     func setTweet() {
@@ -109,21 +109,12 @@ class TweetCell: UITableViewCell {
         nameLabel.attributedText = attributedText
         mesageLabel.text = post.text
         if post.hasImage {
-            tweetImageView.image = UIImage(named: "loginBg")?.withRenderingMode(.alwaysOriginal)
+            tweetImageView.isHidden = false
+            tweetImageView.kf.setImage(with: URL(string: post.imageUrl))
         } else {
-            tweetImageView.image = nil
+            tweetImageView.isHidden = true
         }
-        if post.hasVideo {
-            videoButton.setTitle("Ver Video", for: .normal)
-            videoButton.setTitleColor(.black, for: .normal)
-            if #available(iOS 13.0, *) {
-                let image = UIImage(systemName: "video.fill")
-                videoButton.setImage(image, for: .normal)
-            }
-        } else {
-            videoButton.setImage(nil, for: .normal)
-            videoButton.setTitle("Sin Video Disponible", for: .normal)
-        }
+        videoButton.isHidden = !post.hasVideo
         dateLabel.text = post.createdAt
     }
 }

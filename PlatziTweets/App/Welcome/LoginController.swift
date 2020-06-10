@@ -19,6 +19,7 @@ class LoginController: UIViewController {
         tf.placeholder = "Email"
         tf.autocapitalizationType = .none
         tf.keyboardType = .emailAddress
+        tf.text = "test@test.com"
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
     }()
@@ -28,6 +29,7 @@ class LoginController: UIViewController {
         tf.placeholder = "Password"
         tf.keyboardType = .webSearch
         tf.isSecureTextEntry = true
+        tf.text = "qwerty"
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
     }()
