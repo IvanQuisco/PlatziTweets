@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import Simple_Networking
 import SVProgressHUD
+import NotificationBannerSwift
 
 class HomeController: UITableViewController {
     
@@ -45,7 +46,16 @@ class HomeController: UITableViewController {
         view.backgroundColor = .white
         setupNavigationItems()
         setupTableView()
-        getPosts()
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: NSNotification.Name("reloadData"), object: nil)
+    }
+    
+    @objc func reloadData() {
+        getPosts(loadingMessage: "Updating")
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        getPosts(loadingMessage: "Getting Tweets")
     }
     
     private func setupTableView() {
@@ -82,10 +92,10 @@ class HomeController: UITableViewController {
         navigationItem.title = "Tweets"
     }
 
-    func getPosts() {
+    func getPosts(loadingMessage: String) {
         
         DispatchQueue.main.async {
-            SVProgressHUD.show(withStatus: "Getting Tweets")
+            SVProgressHUD.show(withStatus: loadingMessage)
         }
         
         SN.get(endpoint: Endpoints.getPost) { (response: SNResultWithEntity<[Post], ErrorResponse>) in
@@ -103,6 +113,32 @@ class HomeController: UITableViewController {
                 print("error again", entity.error)
             }
         }
+    }
+    
+    func deleteRowAt(indexPath: IndexPath) {
+        let postID = dataSource[indexPath.row].id
+        
+        let endpoint = Endpoints.delete + postID
+        
+        SVProgressHUD.show(withStatus: "Wait")
+        
+        SN.delete(endpoint: endpoint) { [weak self] (response: SNResultWithEntity<GeneralResponse, ErrorResponse>) in
+            
+            SVProgressHUD.dismiss()
+            
+            switch response {
+            case .success:
+                self?.dataSource.remove(at: indexPath.row)
+                self?.tableView.deleteRows(at: [indexPath], with: .left)
+            case .error(let error):
+                NotificationBanner(title: nil, subtitle: "Error: \(error.localizedDescription)", leftView: nil, rightView: nil, style: .danger, colors: nil).show()
+            case .errorResult(let entity):
+                NotificationBanner(title: nil, subtitle: "Error: \(entity.error)", leftView: nil, rightView: nil, style: .warning, colors: nil).show()
+                
+            }
+        }
+        
+        
     }
 }
 
@@ -142,5 +178,19 @@ extension HomeController {
         }
         
         return height
+    }
+    
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete") { [weak self] (_, _) in
+            self?.deleteRowAt(indexPath: indexPath)
+        }
+        return [deleteAction]
+    }
+    
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        guard let currentUser = UserDefaults.standard.value(forKey: "currentUser") as? String else {
+            return false
+        }
+        return dataSource[indexPath.row].author.email == currentUser
     }
 }

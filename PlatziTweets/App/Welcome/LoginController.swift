@@ -129,6 +129,7 @@ class LoginController: UIViewController {
 
             switch response {
             case .success(let user):
+                UserDefaults.standard.set(user.user.email, forKey: "currentUser")
                 SimpleNetworking.setAuthenticationHeader(prefix: "", token: user.token)
                 let nav = UINavigationController(rootViewController: HomeController())
                 nav.modalPresentationStyle = .fullScreen
