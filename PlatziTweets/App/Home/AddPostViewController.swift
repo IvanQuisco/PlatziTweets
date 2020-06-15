@@ -11,6 +11,7 @@ import UIKit
 import Simple_Networking
 import SVProgressHUD
 import NotificationBannerSwift
+import FirebaseStorage
 
 
 class AddPostViewController: UIViewController {
@@ -126,7 +127,8 @@ class AddPostViewController: UIViewController {
         postButton.addTarget(self, action: #selector(postButtonTapped), for: .touchUpInside)
         
         previewImageView.heightAnchor.constraint(equalToConstant: 200).isActive = true
-        previewImageView.isHidden = true
+//        previewImageView.isHidden = true
+        previewImageView.image = UIImage(named: "loginBg")
         
     }
     
@@ -143,7 +145,58 @@ class AddPostViewController: UIViewController {
         self.present(controller, animated: true, completion: nil)
     }
     
+    private func uploadPhotoToFirebase() {
+        guard
+            let image = previewImageView.image,
+            let savedImageData = image.jpegData(compressionQuality: 0.1)
+        else {
+            NotificationBanner(title: nil, subtitle: "Error", leftView: nil, rightView: nil, style: .danger, colors: nil).show()
+                return
+        }
+        
+        SVProgressHUD.show(withStatus: "Uploading")
+        
+        let metaDataConfig = StorageMetadata()
+        metaDataConfig.contentType = "image/jpg"
+        
+        let storage = Storage.storage()
+        
+        
+        let imageName = UUID().uuidString
+        
+        let folderReference = storage.reference(withPath: "photos-tweet/\(imageName).jpg")
+        
+        DispatchQueue.global(qos: .background).async {
+            
+            SVProgressHUD.dismiss()
+            
+            folderReference.putData(savedImageData, metadata: metaDataConfig) { (meta: StorageMetadata?, error: Error?) in
+                if let error = error  {
+                    NotificationBanner(title: nil, subtitle: "error: \(error.localizedDescription)", leftView: nil, rightView: nil, style: .danger, colors: nil).show()
+                    
+                    return
+                }
+                
+                folderReference.downloadURL { (url: URL?, error: Error?) in
+                    
+                    if let url = url {
+                        print(url)
+                    }
+                }
+            }
+        }
+        
+        
+        
+        
+    }
+    
     @objc func postButtonTapped() {
+        
+        uploadPhotoToFirebase()
+        
+        return
+        
         
         guard let text = postTextView.text, !text.isEmpty else {
             NotificationBanner(title: nil, subtitle: "Empty tweet", leftView: nil, rightView: nil, style: .danger, colors: nil).show()
