@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		32BBAF5832DC13A476A9ECD1 /* Pods_PlatziTweets.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84F54897FCE4AC517D799955 /* Pods_PlatziTweets.framework */; };
+		481E3B67249809D20071715E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 481E3B66249809D20071715E /* GoogleService-Info.plist */; };
 		487AB77B2485764200CC6388 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487AB77A2485764200CC6388 /* AppDelegate.swift */; };
 		487AB77F2485764200CC6388 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487AB77E2485764200CC6388 /* WelcomeViewController.swift */; };
 		487AB7822485764200CC6388 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 487AB7802485764200CC6388 /* Main.storyboard */; };
@@ -33,6 +34,7 @@
 
 /* Begin PBXFileReference section */
 		003838CC3A3025252697ED38 /* Pods-PlatziTweets.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlatziTweets.release.xcconfig"; path = "Target Support Files/Pods-PlatziTweets/Pods-PlatziTweets.release.xcconfig"; sourceTree = "<group>"; };
+		481E3B66249809D20071715E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		487AB7772485764200CC6388 /* PlatziTweets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlatziTweets.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		487AB77A2485764200CC6388 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		487AB77E2485764200CC6388 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
@@ -107,6 +109,7 @@
 				487AB77A2485764200CC6388 /* AppDelegate.swift */,
 				487AB7802485764200CC6388 /* Main.storyboard */,
 				487AB7852485764800CC6388 /* LaunchScreen.storyboard */,
+				481E3B66249809D20071715E /* GoogleService-Info.plist */,
 				487AB7882485764800CC6388 /* Info.plist */,
 			);
 			path = Base;
@@ -269,6 +272,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				487AB7872485764800CC6388 /* LaunchScreen.storyboard in Resources */,
+				481E3B67249809D20071715E /* GoogleService-Info.plist in Resources */,
 				487AB7842485764800CC6388 /* Assets.xcassets in Resources */,
 				487AB7822485764200CC6388 /* Main.storyboard in Resources */,
 			);
