@@ -127,8 +127,7 @@ class AddPostViewController: UIViewController {
         postButton.addTarget(self, action: #selector(postButtonTapped), for: .touchUpInside)
         
         previewImageView.heightAnchor.constraint(equalToConstant: 200).isActive = true
-//        previewImageView.isHidden = true
-        previewImageView.image = UIImage(named: "loginBg")
+        previewImageView.isHidden = true
         
     }
     
@@ -143,6 +142,11 @@ class AddPostViewController: UIViewController {
         guard let controller = imagePickerController else {return}
         
         self.present(controller, animated: true, completion: nil)
+    }
+    
+    @objc func postButtonTapped() {
+        uploadPhotoToFirebase()
+        
     }
     
     private func uploadPhotoToFirebase() {
@@ -168,9 +172,12 @@ class AddPostViewController: UIViewController {
         
         DispatchQueue.global(qos: .background).async {
             
-            SVProgressHUD.dismiss()
+            
             
             folderReference.putData(savedImageData, metadata: metaDataConfig) { (meta: StorageMetadata?, error: Error?) in
+                
+                SVProgressHUD.dismiss()
+                
                 if let error = error  {
                     NotificationBanner(title: nil, subtitle: "error: \(error.localizedDescription)", leftView: nil, rightView: nil, style: .danger, colors: nil).show()
                     
@@ -179,9 +186,8 @@ class AddPostViewController: UIViewController {
                 
                 folderReference.downloadURL { (url: URL?, error: Error?) in
                     
-                    if let url = url {
-                        print(url)
-                    }
+                    let downloadURL = url?.absoluteString ?? ""
+                    self.savePost(imageURL: downloadURL)
                 }
             }
         }
@@ -191,13 +197,8 @@ class AddPostViewController: UIViewController {
         
     }
     
-    @objc func postButtonTapped() {
-        
-        uploadPhotoToFirebase()
-        
-        return
-        
-        
+    
+    func savePost(imageURL: String?) {
         guard let text = postTextView.text, !text.isEmpty else {
             NotificationBanner(title: nil, subtitle: "Empty tweet", leftView: nil, rightView: nil, style: .danger, colors: nil).show()
             return
@@ -205,7 +206,7 @@ class AddPostViewController: UIViewController {
         
         SVProgressHUD.show(withStatus: "Posting")
         
-        let request = PostRequest(text: text, imageUrl: nil, videoUrl: nil, location: nil)
+        let request = PostRequest(text: text, imageUrl: imageURL, videoUrl: nil, location: nil)
         
         SN.post(endpoint: Endpoints.post, model: request) { (response: SNResultWithEntity<Post, ErrorResponse>) in
             
@@ -222,7 +223,6 @@ class AddPostViewController: UIViewController {
                 NotificationBanner(title: nil, subtitle: entity.error, leftView: nil, rightView: nil, style: .warning, colors: nil).show()
             }
         }
-        
     }
 }
 
