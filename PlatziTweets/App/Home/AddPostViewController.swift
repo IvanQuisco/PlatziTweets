@@ -287,58 +287,7 @@ class AddPostViewController: UIViewController {
                 }
             }
         }
-        
-        
     }
-    
-//    private func uploadPhotoToFirebase() {
-//        guard
-//            let image = previewImageView.image,
-//            let savedImageData = image.jpegData(compressionQuality: 0.1)
-//        else {
-//            NotificationBanner(title: nil, subtitle: "Error", leftView: nil, rightView: nil, style: .danger, colors: nil).show()
-//                return
-//        }
-//
-//        SVProgressHUD.show(withStatus: "Uploading")
-//
-//        let metaDataConfig = StorageMetadata()
-//        metaDataConfig.contentType = "image/jpg"
-//
-//        let storage = Storage.storage()
-//
-//
-//        let imageName = UUID().uuidString
-//
-//        let folderReference = storage.reference(withPath: "photos-tweet/\(imageName).jpg")
-//
-//        DispatchQueue.global(qos: .background).async {
-//
-//
-//
-//            folderReference.putData(savedImageData, metadata: metaDataConfig) { (meta: StorageMetadata?, error: Error?) in
-//
-//                SVProgressHUD.dismiss()
-//
-//                if let error = error  {
-//                    NotificationBanner(title: nil, subtitle: "error: \(error.localizedDescription)", leftView: nil, rightView: nil, style: .danger, colors: nil).show()
-//
-//                    return
-//                }
-//
-//                folderReference.downloadURL { (url: URL?, error: Error?) in
-//
-//                    let downloadURL = url?.absoluteString ?? ""
-//                    self.savePost(imageURL: downloadURL)
-//                }
-//            }
-//        }
-//
-//
-//
-//
-//    }
-    
     
     func savePost(imageURL: String?, videoURL: String?) {
         guard let text = postTextView.text, !text.isEmpty else {

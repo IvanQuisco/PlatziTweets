@@ -11,6 +11,7 @@ import UIKit
 import Simple_Networking
 import SVProgressHUD
 import NotificationBannerSwift
+import AVKit
 
 class HomeController: UITableViewController {
     
@@ -154,6 +155,18 @@ extension HomeController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! TweetCell
         cell.post = dataSource[indexPath.row]
+        
+        cell.needsToShowVideo = { url in
+            let avPlayer = AVPlayer(url: url)
+            
+            let playerController = AVPlayerViewController()
+            playerController.player = avPlayer
+            
+            self.present(playerController, animated: true) {
+                playerController.player?.play()
+            }
+            
+        }
         return cell
     }
     

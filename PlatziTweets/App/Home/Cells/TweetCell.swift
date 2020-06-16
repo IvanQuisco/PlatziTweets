@@ -18,6 +18,9 @@ class TweetCell: UITableViewCell {
         }
     }
     
+    var videoURL: URL?
+    var needsToShowVideo: ((_ url: URL) -> Void)?
+    
     
     let nameLabel: UILabel = {
         let label = UILabel()
@@ -97,6 +100,13 @@ class TweetCell: UITableViewCell {
         stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20).isActive = true
         
         tweetImageView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 40).isActive = true
+        
+        videoButton.addTarget(self, action: #selector(videoButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc func videoButtonTapped() {
+        guard let url = videoURL else {return}
+        needsToShowVideo?(url)
     }
     
     func setTweet() {
@@ -116,5 +126,7 @@ class TweetCell: UITableViewCell {
         }
         videoButton.isHidden = !post.hasVideo
         dateLabel.text = post.createdAt
+        
+        self.videoURL = URL(string: post.videoUrl)
     }
 }
