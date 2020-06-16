@@ -16,11 +16,16 @@ import AVFoundation
 import AVKit
 import MobileCoreServices
 
+enum MediaType {
+    case photo
+    case video
+}
+
 
 class AddPostViewController: UIViewController {
     
     var imagePickerController: UIImagePickerController?
-    var currentVideoURL: String?
+    var currentVideoURL: URL?
     
     let postTextView: UITextView = {
         let textView = UITextView()
@@ -53,6 +58,20 @@ class AddPostViewController: UIViewController {
         btn.setTitleColor(.black, for: .normal)
         if #available(iOS 13, *) {
             let image = UIImage(systemName: "photo")?.withRenderingMode(.alwaysOriginal)
+            btn.setImage(image, for: .normal)
+        }
+        btn.tintColor = .green
+        btn.layer.cornerRadius = 25
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        return btn
+    }()
+    
+    let videoPreviewButton: UIButton = {
+        let btn = UIButton()
+        btn.setTitle("Video preview", for: .normal)
+        btn.setTitleColor(.black, for: .normal)
+        if #available(iOS 13, *) {
+            let image = UIImage(systemName: "video")?.withRenderingMode(.alwaysTemplate)
             btn.setImage(image, for: .normal)
         }
         btn.tintColor = .green
@@ -110,7 +129,7 @@ class AddPostViewController: UIViewController {
         bottomImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         bottomImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         
-        let stackView = UIStackView(arrangedSubviews: [postTextView,previewImageView,openCameraButton,postButton])
+        let stackView = UIStackView(arrangedSubviews: [postTextView,previewImageView,videoPreviewButton,openCameraButton,postButton])
         stackView.axis = .vertical
         stackView.distribution = .equalSpacing
         stackView.spacing = 18
@@ -128,6 +147,10 @@ class AddPostViewController: UIViewController {
         openCameraButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
         openCameraButton.addTarget(self, action: #selector(openCameraButtonTapped), for: .touchUpInside)
         
+        videoPreviewButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        videoPreviewButton.addTarget(self, action: #selector(videoPreviewButtonTapped), for: .touchUpInside)
+        videoPreviewButton.isHidden = true
+        
         postButton.addTarget(self, action: #selector(postButtonTapped), for: .touchUpInside)
         
         previewImageView.heightAnchor.constraint(equalToConstant: 200).isActive = true
@@ -136,8 +159,38 @@ class AddPostViewController: UIViewController {
     }
     
     @objc func openCameraButtonTapped() {
-        openPhotoCamera()
+        
+        let alert = UIAlertController(title: "Camera", message: nil, preferredStyle: .actionSheet)
+        
+        alert.addAction(UIAlertAction(title: "Photo", style: .default, handler: { (_) in
+            self.openPhotoCamera()
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Video", style: .default, handler: { (_) in
+            self.openVideoCamera()
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        self.present(alert, animated: true, completion: nil)
     }
+    
+    @objc func videoPreviewButtonTapped() {
+        performVideoPreview()
+    }
+    
+    func performVideoPreview() {
+        guard let videoURL = currentVideoURL else {return}
+        
+        let avPlayer = AVPlayer(url: videoURL)
+        let playerController = AVPlayerViewController()
+        playerController.player = avPlayer
+       
+        self.present(playerController, animated: true) {
+            playerController.player?.play()
+        }
+    }
+    
     
     func openVideoCamera() {
         imagePickerController = UIImagePickerController()
@@ -169,35 +222,50 @@ class AddPostViewController: UIViewController {
     
     @objc func postButtonTapped() {
 //        uploadPhotoToFirebase()
-        openVideoCamera()
+        uploadMeadiaToFirebase(type: .video)
     }
     
-    private func uploadPhotoToFirebase() {
+    func uploadMeadiaToFirebase(type: MediaType) {
+        var data: Data?
+        var metadataConfigType: String
+        var path: String
+        
+        let mediaName: String = UUID().uuidString
+        
+        if type == .photo {
+            if let image = previewImageView.image {
+                data = image.jpegData(compressionQuality: 0.1)
+            }
+            metadataConfigType = "image/jpg"
+            path = "images-tweets/\(mediaName).jpg"
+        } else {
+            if let videoURL = currentVideoURL {
+                data = try? Data(contentsOf: videoURL)
+            }
+            metadataConfigType = "video/MP4"
+            path = "videos-tweets/\(mediaName).mp4"
+        }
+        
+        
         guard
-            let image = previewImageView.image,
-            let savedImageData = image.jpegData(compressionQuality: 0.1)
+            let validData = data
         else {
-            NotificationBanner(title: nil, subtitle: "Error", leftView: nil, rightView: nil, style: .danger, colors: nil).show()
+            NotificationBanner(title: nil, subtitle: "Invalid media data", leftView: nil, rightView: nil, style: .danger, colors: nil).show()
                 return
         }
         
         SVProgressHUD.show(withStatus: "Uploading")
         
         let metaDataConfig = StorageMetadata()
-        metaDataConfig.contentType = "image/jpg"
+        metaDataConfig.contentType = metadataConfigType
         
         let storage = Storage.storage()
         
-        
-        let imageName = UUID().uuidString
-        
-        let folderReference = storage.reference(withPath: "photos-tweet/\(imageName).jpg")
+        let folderReference = storage.reference(withPath: path)
         
         DispatchQueue.global(qos: .background).async {
             
-            
-            
-            folderReference.putData(savedImageData, metadata: metaDataConfig) { (meta: StorageMetadata?, error: Error?) in
+            folderReference.putData(validData, metadata: metaDataConfig) { (meta: StorageMetadata?, error: Error?) in
                 
                 SVProgressHUD.dismiss()
                 
@@ -210,18 +278,69 @@ class AddPostViewController: UIViewController {
                 folderReference.downloadURL { (url: URL?, error: Error?) in
                     
                     let downloadURL = url?.absoluteString ?? ""
-                    self.savePost(imageURL: downloadURL)
+                    if type == .photo {
+                        self.savePost(imageURL: downloadURL, videoURL: nil)
+                    } else {
+                        self.savePost(imageURL: nil, videoURL: downloadURL)
+                    }
+                    
                 }
             }
         }
         
         
-        
-        
     }
     
+//    private func uploadPhotoToFirebase() {
+//        guard
+//            let image = previewImageView.image,
+//            let savedImageData = image.jpegData(compressionQuality: 0.1)
+//        else {
+//            NotificationBanner(title: nil, subtitle: "Error", leftView: nil, rightView: nil, style: .danger, colors: nil).show()
+//                return
+//        }
+//
+//        SVProgressHUD.show(withStatus: "Uploading")
+//
+//        let metaDataConfig = StorageMetadata()
+//        metaDataConfig.contentType = "image/jpg"
+//
+//        let storage = Storage.storage()
+//
+//
+//        let imageName = UUID().uuidString
+//
+//        let folderReference = storage.reference(withPath: "photos-tweet/\(imageName).jpg")
+//
+//        DispatchQueue.global(qos: .background).async {
+//
+//
+//
+//            folderReference.putData(savedImageData, metadata: metaDataConfig) { (meta: StorageMetadata?, error: Error?) in
+//
+//                SVProgressHUD.dismiss()
+//
+//                if let error = error  {
+//                    NotificationBanner(title: nil, subtitle: "error: \(error.localizedDescription)", leftView: nil, rightView: nil, style: .danger, colors: nil).show()
+//
+//                    return
+//                }
+//
+//                folderReference.downloadURL { (url: URL?, error: Error?) in
+//
+//                    let downloadURL = url?.absoluteString ?? ""
+//                    self.savePost(imageURL: downloadURL)
+//                }
+//            }
+//        }
+//
+//
+//
+//
+//    }
     
-    func savePost(imageURL: String?) {
+    
+    func savePost(imageURL: String?, videoURL: String?) {
         guard let text = postTextView.text, !text.isEmpty else {
             NotificationBanner(title: nil, subtitle: "Empty tweet", leftView: nil, rightView: nil, style: .danger, colors: nil).show()
             return
@@ -229,7 +348,7 @@ class AddPostViewController: UIViewController {
         
         SVProgressHUD.show(withStatus: "Posting")
         
-        let request = PostRequest(text: text, imageUrl: imageURL, videoUrl: nil, location: nil)
+        let request = PostRequest(text: text, imageUrl: imageURL, videoUrl: videoURL, location: nil)
         
         SN.post(endpoint: Endpoints.post, model: request) { (response: SNResultWithEntity<Post, ErrorResponse>) in
             
@@ -254,7 +373,7 @@ extension AddPostViewController: UIImagePickerControllerDelegate, UINavigationCo
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
         imagePickerController?.dismiss(animated: true , completion: nil)
-        openCameraButton.setTitle("Change photo", for: .normal)
+        openCameraButton.setTitle("Change", for: .normal)
         
         if info.keys.contains(.originalImage) {
             self.previewImageView.isHidden = false
@@ -262,14 +381,8 @@ extension AddPostViewController: UIImagePickerControllerDelegate, UINavigationCo
         }
         
         if info.keys.contains(.mediaURL), let recordedVideoURL = (info[.mediaURL] as? URL)?.absoluteURL {
-            let avPlayer = AVPlayer(url: recordedVideoURL)
-            let playerController = AVPlayerViewController()
-            playerController.player = avPlayer
-            
-            self.present(playerController, animated: true) {
-                playerController.player?.play()
-            }
-            
+            self.currentVideoURL = recordedVideoURL
+            videoPreviewButton.isHidden = false
         }
     }
 }
