@@ -46,5 +46,11 @@
     
     <key>NSMicrophoneUsageDescription</key>
     <string>We will use your microphone to record a video</string>
+    
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>We will use your location</string>
+    
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>We will use your locationo</string>
 </dict>
 </plist>

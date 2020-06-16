@@ -15,6 +15,7 @@ import FirebaseStorage
 import AVFoundation
 import AVKit
 import MobileCoreServices
+import CoreLocation
 
 enum MediaType {
     case photo
@@ -24,8 +25,16 @@ enum MediaType {
 
 class AddPostViewController: UIViewController {
     
-    var imagePickerController: UIImagePickerController?
-    var currentVideoURL: URL?
+    //MARK: - Properties
+    
+    private var imagePickerController: UIImagePickerController?
+    private var currentVideoURL: URL?
+    private var locationManager: CLLocationManager?
+    private var userLocation: CLLocation?
+    
+    
+    
+    //MARK: - UI Elements
     
     let postTextView: UITextView = {
         let textView = UITextView()
@@ -97,11 +106,24 @@ class AddPostViewController: UIViewController {
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(viewTapped)))
         setupNavigationItems()
         setupViews()
+        requestLocation()
+    }
+    
+    private func requestLocation() {
+        
+        guard CLLocationManager.locationServicesEnabled() else { return }
+        
+        locationManager = CLLocationManager()
+        locationManager?.delegate = self
+        locationManager?.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager?.requestAlwaysAuthorization() 
+        locationManager?.startUpdatingLocation()
     }
     
     @objc func viewTapped() {
         view.endEditing(true)
     }
+    
     private func setupNavigationItems() {
         if #available(iOS 13.0, *) {
             let appearance = UINavigationBarAppearance()
@@ -221,8 +243,13 @@ class AddPostViewController: UIViewController {
     }
     
     @objc func postButtonTapped() {
-//        uploadPhotoToFirebase()
-        uploadMeadiaToFirebase(type: .video)
+        if currentVideoURL != nil {
+            uploadMeadiaToFirebase(type: .video)
+        } else if previewImageView.image != nil {
+            uploadMeadiaToFirebase(type: .photo)
+        } else {
+            savePost(imageURL: nil, videoURL: nil)
+        }
     }
     
     func uploadMeadiaToFirebase(type: MediaType) {
@@ -333,5 +360,14 @@ extension AddPostViewController: UIImagePickerControllerDelegate, UINavigationCo
             self.currentVideoURL = recordedVideoURL
             videoPreviewButton.isHidden = false
         }
+    }
+}
+
+extension AddPostViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let bestLocation = locations.last else {return}
+        
+        self.userLocation = bestLocation
+        
     }
 }
