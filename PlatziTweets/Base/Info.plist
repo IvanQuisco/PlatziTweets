@@ -43,5 +43,8 @@
     
     <key>NSCameraUsageDescription</key>
     <string>Allow App to access to your camera?</string>
+    
+    <key>NSMicrophoneUsageDescription</key>
+    <string>We will use your microphone to record a video</string>
 </dict>
 </plist>

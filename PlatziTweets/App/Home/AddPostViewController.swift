@@ -12,11 +12,15 @@ import Simple_Networking
 import SVProgressHUD
 import NotificationBannerSwift
 import FirebaseStorage
+import AVFoundation
+import AVKit
+import MobileCoreServices
 
 
 class AddPostViewController: UIViewController {
     
     var imagePickerController: UIImagePickerController?
+    var currentVideoURL: String?
     
     let postTextView: UITextView = {
         let textView = UITextView()
@@ -132,10 +136,17 @@ class AddPostViewController: UIViewController {
     }
     
     @objc func openCameraButtonTapped() {
+        openPhotoCamera()
+    }
+    
+    func openVideoCamera() {
         imagePickerController = UIImagePickerController()
         imagePickerController?.sourceType  = .camera
+        imagePickerController?.mediaTypes = [kUTTypeMovie as String]
         imagePickerController?.cameraFlashMode = .off
-        imagePickerController?.cameraCaptureMode = .photo
+        imagePickerController?.cameraCaptureMode = .video
+        imagePickerController?.videoQuality = .typeMedium
+        imagePickerController?.videoMaximumDuration = TimeInterval(5)
         imagePickerController?.allowsEditing = true
         imagePickerController?.delegate = self
         
@@ -144,9 +155,21 @@ class AddPostViewController: UIViewController {
         self.present(controller, animated: true, completion: nil)
     }
     
-    @objc func postButtonTapped() {
-        uploadPhotoToFirebase()
+    func openPhotoCamera() {
+        imagePickerController = UIImagePickerController()
+        imagePickerController?.sourceType  = .camera
+        imagePickerController?.cameraFlashMode = .off
+        imagePickerController?.cameraCaptureMode = .photo
+        imagePickerController?.allowsEditing = true
+        imagePickerController?.delegate = self
         
+        guard let controller = imagePickerController else {return}
+        self.present(controller, animated: true, completion: nil)
+    }
+    
+    @objc func postButtonTapped() {
+//        uploadPhotoToFirebase()
+        openVideoCamera()
     }
     
     private func uploadPhotoToFirebase() {
@@ -236,6 +259,17 @@ extension AddPostViewController: UIImagePickerControllerDelegate, UINavigationCo
         if info.keys.contains(.originalImage) {
             self.previewImageView.isHidden = false
             self.previewImageView.image = info[.originalImage] as? UIImage
+        }
+        
+        if info.keys.contains(.mediaURL), let recordedVideoURL = (info[.mediaURL] as? URL)?.absoluteURL {
+            let avPlayer = AVPlayer(url: recordedVideoURL)
+            let playerController = AVPlayerViewController()
+            playerController.player = avPlayer
+            
+            self.present(playerController, animated: true) {
+                playerController.player?.play()
+            }
+            
         }
     }
 }
