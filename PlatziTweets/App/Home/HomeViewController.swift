@@ -91,6 +91,16 @@ class HomeController: UITableViewController {
         }
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.title = "Tweets"
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Map", style: .plain, target: self, action: #selector(mapButtonTapped))
+    }
+    
+    @objc func mapButtonTapped() {
+        let mapController = MapViewController()
+        mapController.posts = dataSource.filter({
+            $0.hasLocation
+        })
+        navigationController?.pushViewController(mapController, animated: true)
     }
 
     func getPosts(loadingMessage: String) {

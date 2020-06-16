@@ -116,7 +116,7 @@ class AddPostViewController: UIViewController {
         locationManager = CLLocationManager()
         locationManager?.delegate = self
         locationManager?.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager?.requestAlwaysAuthorization() 
+        locationManager?.requestAlwaysAuthorization()
         locationManager?.startUpdatingLocation()
     }
     
@@ -322,9 +322,15 @@ class AddPostViewController: UIViewController {
             return
         }
         
+        var postLocation: PostRequestLocation?
+        
+        if let location = self.userLocation {
+            postLocation = PostRequestLocation(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+        }
+        
         SVProgressHUD.show(withStatus: "Posting")
         
-        let request = PostRequest(text: text, imageUrl: imageURL, videoUrl: videoURL, location: nil)
+        let request = PostRequest(text: text, imageUrl: imageURL, videoUrl: videoURL, location: postLocation)
         
         SN.post(endpoint: Endpoints.post, model: request) { (response: SNResultWithEntity<Post, ErrorResponse>) in
             
