@@ -12,21 +12,13 @@ import Kingfisher
 
 class TweetCell: UITableViewCell {
     
-    var post: Post? {
-        didSet {
-            setTweet()
-        }
-    }
-    
-    var videoURL: URL?
-    var needsToShowVideo: ((_ url: URL) -> Void)?
-    
+    //MARK: UI Elements
     
     let nameLabel: UILabel = {
         let label = UILabel()
         let attributedText = NSMutableAttributedString()
         attributedText.append(NSAttributedString(string: "Ivan Q ", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 18), NSAttributedString.Key.foregroundColor: UIColor.black]))
-        attributedText.append(NSAttributedString(string: "@IvanQuintana", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 11), NSAttributedString.Key.foregroundColor: UIColor.gray]))
+        attributedText.append(NSAttributedString(string: "@IvanQuisco", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 11), NSAttributedString.Key.foregroundColor: UIColor.gray]))
         label.attributedText = attributedText
         label.textAlignment = .left
         label.numberOfLines = 1
@@ -77,6 +69,21 @@ class TweetCell: UITableViewCell {
     }()
     
     
+    //MARK: Variables
+    
+    var post: Post? {
+        didSet {
+            setTweet()
+        }
+    }
+    
+    var videoURL: URL?
+    
+    var needsToShowVideo: ((_ url: URL) -> Void)?
+    
+    
+    //MARK: Inits
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
@@ -85,6 +92,9 @@ class TweetCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    
+    //MARK: UI Setup
     
     func setupViews() {
         let stackView = UIStackView(arrangedSubviews: [nameLabel,mesageLabel,tweetImageView,videoButton,dateLabel])
@@ -104,10 +114,16 @@ class TweetCell: UITableViewCell {
         videoButton.addTarget(self, action: #selector(videoButtonTapped), for: .touchUpInside)
     }
     
+    
+    //MARK: Targets
+    
     @objc func videoButtonTapped() {
         guard let url = videoURL else {return}
         needsToShowVideo?(url)
     }
+    
+    
+    //MARK: Functions
     
     func setTweet() {
         guard let post = self.post else {

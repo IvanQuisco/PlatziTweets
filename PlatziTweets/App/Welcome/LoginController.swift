@@ -14,6 +14,8 @@ import SVProgressHUD
 
 class LoginController: UIViewController {
     
+    //MARK: UI Elements
+    
     let emailTextfield: UITextField = {
         let tf = UITextField()
         tf.placeholder = "Email"
@@ -44,7 +46,6 @@ class LoginController: UIViewController {
         return btn
     }()
     
-    
     let bottomImageView: UIImageView = {
         let view = UIImageView()
         view.backgroundColor = .gray
@@ -55,6 +56,9 @@ class LoginController: UIViewController {
         return view
     }()
     
+    
+    //MARK: Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -63,9 +67,8 @@ class LoginController: UIViewController {
         setupViews()
     }
     
-    @objc func viewTapped() {
-        view.endEditing(true)
-    }
+    
+    //MARK: UI Setup
     
     func setupNavigationItems() {
         navigationController?.navigationBar.prefersLargeTitles = true
@@ -97,10 +100,20 @@ class LoginController: UIViewController {
         
     }
     
+    
+    //MARK: Targets
+    
     @objc func loginButtonTapped() {
         viewTapped()
         performLogin()
     }
+    
+    @objc func viewTapped() {
+        view.endEditing(true)
+    }
+    
+    
+    //MARK: Functions
     
     func performLogin() {
         guard let email = emailTextfield.text, !email.isEmpty else {

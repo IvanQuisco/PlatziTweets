@@ -97,8 +97,8 @@
 		487AB7792485764200CC6388 /* PlatziTweets */ = {
 			isa = PBXGroup;
 			children = (
-				488732C0248EA8B1000DCF7E /* Model */,
 				487AB78E24857E5B00CC6388 /* Base */,
+				488732C0248EA8B1000DCF7E /* Model */,
 				487AB79024857E6D00CC6388 /* App */,
 				487AB78F24857E6500CC6388 /* Resources */,
 			);

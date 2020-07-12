@@ -15,16 +15,7 @@ import AVKit
 
 class HomeController: UITableViewController {
     
-    let cellID = "cellID"
-    
-    var dataSource: [Post] = [] {
-        didSet {
-            
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
-        }
-    }
+    //MARK: UI Elements
     
     let newPostButton: UIButton = {
         let btn = UIButton()
@@ -42,6 +33,23 @@ class HomeController: UITableViewController {
         return btn
     }()
     
+    
+    //MARK: Variables
+    
+    let cellID = "cellID"
+    
+    var dataSource: [Post] = [] {
+        didSet {
+            
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
+    
+    //MARK: Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -50,14 +58,13 @@ class HomeController: UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: NSNotification.Name("reloadData"), object: nil)
     }
     
-    @objc func reloadData() {
-        getPosts(loadingMessage: "Updating")
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         getPosts(loadingMessage: "Getting Tweets")
     }
+    
+    
+    //MARK: UI Setup
     
     private func setupTableView() {
         tableView.register(TweetCell.self, forCellReuseIdentifier: cellID)
@@ -69,12 +76,6 @@ class HomeController: UITableViewController {
         newPostButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         newPostButton.addTarget(self, action: #selector(newPostButtonTapped), for: .touchUpInside)
-    }
-    
-    @objc func newPostButtonTapped() {
-        let postController = AddPostViewController()
-        let nav = UINavigationController(rootViewController: postController)
-        self.present(nav, animated: true, completion: nil)
     }
     
     func setupNavigationItems() {
@@ -95,6 +96,19 @@ class HomeController: UITableViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Map", style: .plain, target: self, action: #selector(mapButtonTapped))
     }
     
+    
+    //MARK: Targets
+    
+    @objc func newPostButtonTapped() {
+        let postController = AddPostViewController()
+        let nav = UINavigationController(rootViewController: postController)
+        self.present(nav, animated: true, completion: nil)
+    }
+
+    @objc func reloadData() {
+        getPosts(loadingMessage: "Updating")
+    }
+    
     @objc func mapButtonTapped() {
         let mapController = MapViewController()
         mapController.posts = dataSource.filter({
@@ -102,6 +116,9 @@ class HomeController: UITableViewController {
         })
         navigationController?.pushViewController(mapController, animated: true)
     }
+
+    
+    //MARK: Functions
 
     func getPosts(loadingMessage: String) {
         
@@ -152,6 +169,8 @@ class HomeController: UITableViewController {
         
     }
 }
+
+//MARK: Table view Delegate and Data Source
 
 extension HomeController {
     override func numberOfSections(in tableView: UITableView) -> Int {

@@ -9,7 +9,8 @@
 import UIKit
 
 class WelcomeViewController: UIViewController {
-
+    
+    //MARK: UI Elments
     
     let backgroundImageView: UIImageView = {
         let view = UIImageView()
@@ -59,12 +60,18 @@ class WelcomeViewController: UIViewController {
         return btn
     }()
 
+    
+    //MARK: Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .red
         setupNavigationItems()
         setupViews()
     }
+    
+    
+    //MARK: UI Setup
     
     func setupNavigationItems() {
         if #available(iOS 13.0, *) {
@@ -117,13 +124,13 @@ class WelcomeViewController: UIViewController {
         
         loginButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
-    
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
         registerButton.addTarget(self, action: #selector(registerButtonTapped), for: .touchUpInside)
         
-        
-        
     }
+    
+    
+    //MARK: Targets
     
     @objc func loginButtonTapped() {
         let loginController = LoginController()

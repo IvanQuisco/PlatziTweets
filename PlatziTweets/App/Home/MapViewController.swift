@@ -11,13 +11,21 @@ import MapKit
 
 class MapViewController: UIViewController {
     
-    var posts = [Post]()
+    //MARK: UI Elements
     
     let mapView: MKMapView = {
         let view = MKMapView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+    
+    
+    //MARK: Variables
+    
+    var posts = [Post]()
+    
+    
+    //MARK: Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,40 +34,16 @@ class MapViewController: UIViewController {
         setupViews()
     }
     
-    func setupNavigationItems() {
-        navigationItem.title = "Map"
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         setupMarkers()
     }
     
-    private func setupMarkers() {
-        posts.forEach { (post) in
-            let marker = MKPointAnnotation()
-            marker.coordinate = CLLocationCoordinate2D(latitude: post.location.latitude,
-                                                       longitude: post.location.longitude)
-            
-            marker.title = post.text
-            marker.subtitle = post.author.names
-            
-            mapView.addAnnotation(marker)
-        }
-        
-        guard let lastPost = posts.last else {
-            return
-        }
-        
-        let lastPostLocation = CLLocationCoordinate2D(latitude: lastPost.location.latitude,
-                                                      longitude: lastPost.location.longitude)
-        
-        guard let heading = CLLocationDirection(exactly: 12) else {
-            return
-        }
-        
-        mapView.camera = MKMapCamera(lookingAtCenter: lastPostLocation, fromDistance: 30, pitch: .zero, heading: heading)
-        
+    
+    //MARK: UI Setup
+    
+    func setupNavigationItems() {
+        navigationItem.title = "Map"
     }
     
     func setupViews() {
@@ -70,4 +54,34 @@ class MapViewController: UIViewController {
         mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0).isActive = true
         
     }
+    
+    
+    //MARK: Functions
+    
+    private func setupMarkers() {
+       posts.forEach { (post) in
+           let marker = MKPointAnnotation()
+           marker.coordinate = CLLocationCoordinate2D(latitude: post.location.latitude,
+                                                      longitude: post.location.longitude)
+           
+           marker.title = post.text
+           marker.subtitle = post.author.names
+           
+           mapView.addAnnotation(marker)
+       }
+       
+       guard let lastPost = posts.last else {
+           return
+       }
+       
+       let lastPostLocation = CLLocationCoordinate2D(latitude: lastPost.location.latitude,
+                                                     longitude: lastPost.location.longitude)
+       
+       guard let heading = CLLocationDirection(exactly: 12) else {
+           return
+       }
+       
+       mapView.camera = MKMapCamera(lookingAtCenter: lastPostLocation, fromDistance: 30, pitch: .zero, heading: heading)
+       
+   }
 }

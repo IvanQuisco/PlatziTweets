@@ -14,6 +14,8 @@ import SVProgressHUD
 
 class RegisterController: UIViewController {
     
+    //MARK: UI Elements
+    
     let nameTextfield: UITextField = {
         let tf = UITextField()
         tf.placeholder = "Full name"
@@ -56,7 +58,6 @@ class RegisterController: UIViewController {
         return btn
     }()
     
-    
     let bottomImageView: UIImageView = {
         let view = UIImageView()
         view.backgroundColor = .gray
@@ -67,6 +68,9 @@ class RegisterController: UIViewController {
         return view
     }()
     
+    
+    //MARK: Lyfe Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -75,9 +79,8 @@ class RegisterController: UIViewController {
         setupViews()
     }
     
-    @objc func viewTapped() {
-        view.endEditing(true)
-    }
+    
+    //MARK: UI Setup
     
     func setupNavigationItems() {
         navigationController?.navigationBar.prefersLargeTitles = true
@@ -108,11 +111,21 @@ class RegisterController: UIViewController {
         registerButton.addTarget(self, action: #selector(registerButtonTapped), for: .touchUpInside)
             
     }
+    
+    
+    //MARK: Targets
         
     @objc func registerButtonTapped() {
         viewTapped()
         performLogin()
     }
+    
+    @objc func viewTapped() {
+        view.endEditing(true)
+    }
+    
+    
+    //MARK: Functions
         
     func performLogin() {
         guard let email = emailTextfield.text, !email.isEmpty else {
@@ -149,7 +162,9 @@ class RegisterController: UIViewController {
             }
             
             switch response {
-            case .success:
+            case .success(let user):
+                UserDefaults.standard.set(user.user.email, forKey: "currentUser")
+                SimpleNetworking.setAuthenticationHeader(prefix: "", token: user.token)
                 let nav = UINavigationController(rootViewController: HomeController())
                 nav.modalPresentationStyle = .fullScreen
                 self?.present(nav, animated: true, completion: nil)

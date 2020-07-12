@@ -25,15 +25,6 @@ enum MediaType {
 
 class AddPostViewController: UIViewController {
     
-    //MARK: - Properties
-    
-    private var imagePickerController: UIImagePickerController?
-    private var currentVideoURL: URL?
-    private var locationManager: CLLocationManager?
-    private var userLocation: CLLocation?
-    
-    
-    
     //MARK: - UI Elements
     
     let postTextView: UITextView = {
@@ -89,7 +80,6 @@ class AddPostViewController: UIViewController {
         return btn
     }()
     
-    
     let bottomImageView: UIImageView = {
         let view = UIImageView()
         view.backgroundColor = .gray
@@ -100,6 +90,20 @@ class AddPostViewController: UIViewController {
         return view
     }()
     
+    
+    //MARK: - Properties
+    
+    private var imagePickerController: UIImagePickerController?
+    
+    private var currentVideoURL: URL?
+    
+    private var locationManager: CLLocationManager?
+    
+    private var userLocation: CLLocation?
+     
+    
+    //MARK: Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -109,20 +113,8 @@ class AddPostViewController: UIViewController {
         requestLocation()
     }
     
-    private func requestLocation() {
-        
-        guard CLLocationManager.locationServicesEnabled() else { return }
-        
-        locationManager = CLLocationManager()
-        locationManager?.delegate = self
-        locationManager?.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager?.requestAlwaysAuthorization()
-        locationManager?.startUpdatingLocation()
-    }
     
-    @objc func viewTapped() {
-        view.endEditing(true)
-    }
+    //MARK: UI Setup
     
     private func setupNavigationItems() {
         if #available(iOS 13.0, *) {
@@ -138,10 +130,6 @@ class AddPostViewController: UIViewController {
         navigationItem.title = "Nuevo Tweet"
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Cancel", style: .done, target: self, action: #selector(cancelButtonTapped))
         
-    }
-    
-    @objc func cancelButtonTapped() {
-        self.dismiss(animated: true, completion: nil)
     }
     
     private func setupViews() {
@@ -180,6 +168,23 @@ class AddPostViewController: UIViewController {
         
     }
     
+    
+    //MARK: Targets
+    
+    @objc func cancelButtonTapped() {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func postButtonTapped() {
+        if currentVideoURL != nil {
+            uploadMeadiaToFirebase(type: .video)
+        } else if previewImageView.image != nil {
+            uploadMeadiaToFirebase(type: .photo)
+        } else {
+            savePost(imageURL: nil, videoURL: nil)
+        }
+    }
+    
     @objc func openCameraButtonTapped() {
         
         let alert = UIAlertController(title: "Camera", message: nil, preferredStyle: .actionSheet)
@@ -201,6 +206,24 @@ class AddPostViewController: UIViewController {
         performVideoPreview()
     }
     
+    @objc func viewTapped() {
+       view.endEditing(true)
+    }
+    
+    
+    //MARK: Functions
+
+    private func requestLocation() {
+        
+        guard CLLocationManager.locationServicesEnabled() else { return }
+        
+        locationManager = CLLocationManager()
+        locationManager?.delegate = self
+        locationManager?.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager?.requestAlwaysAuthorization()
+        locationManager?.startUpdatingLocation()
+    }
+    
     func performVideoPreview() {
         guard let videoURL = currentVideoURL else {return}
         
@@ -212,7 +235,6 @@ class AddPostViewController: UIViewController {
             playerController.player?.play()
         }
     }
-    
     
     func openVideoCamera() {
         imagePickerController = UIImagePickerController()
@@ -240,16 +262,6 @@ class AddPostViewController: UIViewController {
         
         guard let controller = imagePickerController else {return}
         self.present(controller, animated: true, completion: nil)
-    }
-    
-    @objc func postButtonTapped() {
-        if currentVideoURL != nil {
-            uploadMeadiaToFirebase(type: .video)
-        } else if previewImageView.image != nil {
-            uploadMeadiaToFirebase(type: .photo)
-        } else {
-            savePost(imageURL: nil, videoURL: nil)
-        }
     }
     
     func uploadMeadiaToFirebase(type: MediaType) {
@@ -350,6 +362,8 @@ class AddPostViewController: UIViewController {
     }
 }
 
+
+//MARK: Picker Controller Delegate
 
 extension AddPostViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
